@@ -5,51 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mid Term Exam 💜</title>
     <style>
-        /* === PURPLE THEME === */
         body { font-family: 'Segoe UI', sans-serif; background-color: #f3e5f5; padding: 0; margin: 0; padding-bottom: 80px; }
-        
         .menu-btn { position: fixed; top: 15px; left: 15px; font-size: 20px; cursor: pointer; color: #6a1b9a; background: white; padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; }
         .edit-btn { position: fixed; top: 15px; right: 15px; font-size: 14px; cursor: pointer; color: white; background: #7b1fa2; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000; font-weight: bold; border: 2px solid white; transition: 0.3s; }
         .edit-btn.editing { background: #2e7d32; }
-
-        /* Sidebar */
         .side-menu { height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0; background-color: rgba(255, 255, 255, 0.98); overflow-x: hidden; transition: 0.3s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 60px; }
         .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #6a1b9a; display: block; font-weight: bold; border-bottom: 1px solid #e1bee7; }
         .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #6a1b9a; }
-
         .header { text-align: center; margin-top: 70px; margin-bottom: 20px; }
         h2 { color: #6a1b9a; font-family: 'Courier New', monospace; margin: 0; }
         p { font-size: 12px; color: #8e24aa; }
-
-        /* === CARD DESIGN === */
         .container { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .exam-card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 6px solid #8e24aa; display: flex; flex-direction: column; gap: 10px; position: relative; }
-
         .card-top { display: flex; justify-content: space-between; align-items: center; }
         .course-input { font-weight: bold; color: #4a148c; font-size: 20px; border: none; width: 60%; }
         .date-input { font-size: 12px; color: #7b1fa2; border: 1px solid #e1bee7; padding: 4px; border-radius: 5px; background: #f3e5f5; }
-
         .syllabus-box textarea { width: 100%; border: none; font-family: inherit; font-size: 14px; color: #555; background: #f3e5f5; resize: none; height: 45px; border-radius: 8px; padding: 8px; box-sizing: border-box; margin-top: 5px; }
         .syllabus-box textarea:focus { outline: 1px solid #8e24aa; background: white; }
-
         .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
         .marks-box { width: 40%; background: #ede7f6; padding: 5px 10px; border-radius: 8px; }
         .marks-label { font-size: 10px; color: #5e35b1; font-weight: bold; }
         .marks-input { background: transparent; border: none; font-weight: bold; color: #4527a0; font-size: 16px; width: 100%; }
-
         .status-box { display: flex; flex-direction: column; align-items: center; width: 50%; }
         .exam-check { transform: scale(1.4); accent-color: #7b1fa2; cursor: pointer; }
         .success-msg { display: none; font-size: 11px; font-weight: bold; color: #6a1b9a; margin-top: 2px; animation: popIn 0.4s; }
         @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-
         .delete-btn { position: absolute; top: 10px; right: -10px; background: #ffebee; color: #d32f2f; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: none; }
         .add-btn { display: none; width: 100%; padding: 12px; background: white; border: 2px dashed #7b1fa2; color: #6a1b9a; font-weight: bold; border-radius: 15px; cursor: pointer; }
-
         .footer-btns { text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
         .save-btn { padding: 12px 40px; background: #7b1fa2; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(123, 31, 162, 0.3); }
         .reset-btn { padding: 10px 30px; background: #e57373; color: white; border: none; border-radius: 50px; cursor: pointer; }
-
-        /* Modal */
         #romanticModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); z-index: 3000; justify-content: center; align-items: center; }
         .modal-box { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(106, 27, 154, 0.2); border: 2px solid #e1bee7; width: 80%; max-width: 300px; }
         .modal-input { width: 80%; padding: 10px; border: 2px solid #ce93d8; border-radius: 50px; text-align: center; margin-bottom: 15px; font-size: 16px; }
@@ -58,7 +43,6 @@
     </style>
 </head>
 <body>
-
     <div class="menu-btn" onclick="openNav()">☰</div>
     <button id="editBtn" class="edit-btn" onclick="triggerEdit()">✎ Edit</button>
 
@@ -87,17 +71,14 @@
         <h2>📖 Mid Term 📖</h2>
         <p>Best of luck! Shine bright! 💜</p>
     </div>
-
     <div class="container" id="examContainer"></div>
     <div class="container"><button class="add-btn" id="addBtn" onclick="addExam()">+ Add Exam</button></div>
-
     <div class="footer-btns">
         <button class="save-btn" onclick="saveData()">Save Progress 💜</button>
         <button class="reset-btn" onclick="resetData()">Reset 🔄</button>
     </div>
 
     <script>
-        // DATA EXTRACTED FROM YOUR IMAGE
         const defaultExams = [
             { course: "PHB101", syllabus: "", date: "2026-04-19T09:30", marks: "", taken: false },
             { course: "PHB102", syllabus: "", date: "2026-04-20T15:00", marks: "", taken: false },
@@ -108,17 +89,17 @@
         let examList = [];
         let isEditing = false;
         
-        // --- UPDATED: REMOTE MESSAGE LOGIC ---
-        let messages = ["Exam Done! 🎉", "You did great! 💜", "Relax now! ✨", "Proud of you! 🎓"];
-        
+        // --- NEW LOGIC: Specific Messages ---
+        let messages = ["Good Luck! 💜", "You got this!", "Amazing!", "Well done!"]; 
+
         const savedConfig = localStorage.getItem('secret_config_v1');
         if(savedConfig) {
             const config = JSON.parse(savedConfig);
-            if(config.exam && config.exam.length > 0) {
-                messages = config.exam;
+            if(config.mid_specific && config.mid_specific.length > 0) {
+                messages = config.mid_specific;
             }
         }
-        // --- END REMOTE MESSAGE LOGIC ---
+        // ------------------------------------
 
         window.onload = function() { loadData(); renderList(); };
 
@@ -128,10 +109,11 @@
             examList.forEach((exam, index) => {
                 const card = document.createElement("div");
                 card.className = "exam-card";
+                let dateVal = exam.date;
                 
-                // Format Date for Display
-                let dateVal = exam.date; 
-                
+                // Use specific message by index
+                let rewardMsg = messages[index] ? messages[index] : "Good Job! 💜";
+
                 card.innerHTML = `
                     <div class="card-top">
                         <input type="text" class="course-input" value="${exam.course}" onchange="updateData(${index}, 'course', this.value)" ${isEditing ? "" : "readonly"}>
@@ -147,7 +129,7 @@
                         </div>
                         <div class="status-box">
                             <input type="checkbox" class="exam-check" onchange="toggleTaken(${index})" ${exam.taken ? "checked" : ""}>
-                            <div class="success-msg" style="display: ${exam.taken ? 'block' : 'none'}">${messages[index % messages.length]}</div>
+                            <div class="success-msg" style="display: ${exam.taken ? 'block' : 'none'}">${rewardMsg}</div>
                         </div>
                     </div>
                     <button class="delete-btn" onclick="deleteRow(${index})" style="display: ${isEditing ? 'block' : 'none'}">✖</button>
@@ -161,44 +143,28 @@
         function toggleTaken(i) { examList[i].taken = !examList[i].taken; renderList(); }
         function addExam() { examList.push({ course: "New", syllabus: "", date: "", marks: "", taken: false }); renderList(); }
         function deleteRow(i) { if(confirm("Delete?")) { examList.splice(i, 1); renderList(); } }
-
-        function triggerEdit() {
-            if(isEditing) { isEditing = false; document.getElementById("editBtn").classList.remove("editing"); document.getElementById("editBtn").innerText = "✎ Edit"; saveData(); renderList(); }
-            else { document.getElementById("romanticModal").style.display = "flex"; document.getElementById("secretPass").value = ""; document.getElementById("errMsg").style.display = "none"; }
-        }
+        function triggerEdit() { if(isEditing) { isEditing = false; document.getElementById("editBtn").classList.remove("editing"); document.getElementById("editBtn").innerText = "✎ Edit"; saveData(); renderList(); } else { document.getElementById("romanticModal").style.display = "flex"; document.getElementById("secretPass").value = ""; document.getElementById("errMsg").style.display = "none"; } }
         function verifyPass() { if(document.getElementById("secretPass").value === "0812") { isEditing = true; document.getElementById("romanticModal").style.display = "none"; document.getElementById("editBtn").classList.add("editing"); document.getElementById("editBtn").innerText = "✓ Done"; renderList(); } else { document.getElementById("errMsg").style.display = "block"; } }
         function closeModal() { document.getElementById("romanticModal").style.display = "none"; }
-
         function saveData() { localStorage.setItem("myMidData", JSON.stringify(examList)); alert("Saved successfully! 💜"); }
         function loadData() { const saved = localStorage.getItem("myMidData"); if(saved) examList = JSON.parse(saved); else examList = JSON.parse(JSON.stringify(defaultExams)); }
         function resetData() { if(confirm("Delete all data?")) { localStorage.removeItem("myMidData"); location.reload(); } }
         function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
     </script>
-
     <script>
         const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
         const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
-
         async function fetchSecretMessages() {
             try {
-                let response = await fetch(`https://api.jsonbin.io/v3/b/${REMOTE_BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': REMOTE_API_KEY }
-                });
-                
+                let response = await fetch(`https://api.jsonbin.io/v3/b/${REMOTE_BIN_ID}/latest`, { headers: { 'X-Master-Key': REMOTE_API_KEY } });
                 if (response.ok) {
                     let result = await response.json();
-                    let data = result.record;
-
-                    localStorage.setItem('secret_config_v1', JSON.stringify(data));
-                    console.log("Secret messages updated from Cloud! ☁️");
-                    
+                    localStorage.setItem('secret_config_v1', JSON.stringify(result.record));
                     if(typeof loadData === "function") loadData(); 
                     if(typeof renderList === "function") renderList();
                 }
-            } catch (error) {
-                console.log("Could not fetch remote data (Offline?)");
-            }
+            } catch (error) { console.log("Offline"); }
         }
         fetchSecretMessages();
     </script>
