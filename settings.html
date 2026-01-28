@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel ☁️</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; }
+        .save-btn { width: 100%; padding: 15px; background: #00e676; border: none; border-radius: 10px; margin-top: 20px; font-weight: bold; cursor: pointer; }
+        h2 { text-align: center; color: #00e676; }
+    </style>
+</head>
+<body>
+    <h2>☁️ Remote Control</h2>
+    
+    <label>Sunday Msg:</label><input type="text" id="r_sun">
+    <label>Monday Msg:</label><input type="text" id="r_mon">
+    <label>Tuesday Msg:</label><input type="text" id="r_tue">
+    <label>Wednesday Msg:</label><input type="text" id="r_wed">
+    <label>Thursday Msg:</label><input type="text" id="r_thu">
+    
+    <br><br>
+    <label>Quiz Rewards (Comma separated):</label>
+    <textarea id="q_msgs"></textarea>
+
+    <label>Assignment Rewards:</label>
+    <textarea id="a_msgs"></textarea>
+
+    <label>Exam Rewards:</label>
+    <textarea id="e_msgs"></textarea>
+
+    <button class="save-btn" onclick="uploadData()">UPDATE HER PHONE 🚀</button>
+
+    <script>
+        // ==============================
+        // আপনার ক্রেডেনশিয়াল বসানো হয়েছে
+        // ==============================
+        const BIN_ID = "697a8010d0ea881f408e87d7"; 
+        const API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
+        // ==============================
+
+        async function uploadData() {
+            const data = {
+                routine: [
+                    document.getElementById('r_sun').value,
+                    document.getElementById('r_mon').value,
+                    document.getElementById('r_tue').value,
+                    document.getElementById('r_wed').value,
+                    document.getElementById('r_thu').value
+                ],
+                quiz: document.getElementById('q_msgs').value.split(','),
+                assignment: document.getElementById('a_msgs').value.split(','),
+                exam: document.getElementById('e_msgs').value.split(',')
+            };
+
+            const btn = document.querySelector('.save-btn');
+            btn.innerText = "Sending...";
+
+            try {
+                // JSONBin V3 API Call
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+                alert("Updated Successfully! She will see this now. ❤️");
+                btn.innerText = "UPDATE HER PHONE 🚀";
+            } catch (error) {
+                alert("Error! Check internet connection.");
+                console.error(error);
+                btn.innerText = "Try Again ❌";
+            }
+        }
+    </script>
+</body>
+</html>
