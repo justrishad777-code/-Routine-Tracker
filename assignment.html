@@ -165,7 +165,17 @@
         let taskList = [];
         let isEditing = false;
         
-        const messages = ["Submission Done! 🎉", "Presentation Ready! 🎤", "Great Work! 💙", "So Proud of You! ✨"];
+        // --- UPDATED: REMOTE MESSAGE LOGIC ---
+        let messages = ["Submission Done! 🎉", "Presentation Ready! 🎤", "Great Work! 💙", "So Proud of You! ✨"];
+        
+        const savedConfig = localStorage.getItem('secret_config_v1');
+        if(savedConfig) {
+            const config = JSON.parse(savedConfig);
+            if(config.assignment && config.assignment.length > 0) {
+                messages = config.assignment;
+            }
+        }
+        // --- END REMOTE MESSAGE LOGIC ---
 
         window.onload = function() { loadData(); renderTaskList(); };
 
@@ -308,6 +318,33 @@
         function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
 
+    </script>
+
+    <script>
+        const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
+        const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
+
+        async function fetchSecretMessages() {
+            try {
+                let response = await fetch(`https://api.jsonbin.io/v3/b/${REMOTE_BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': REMOTE_API_KEY }
+                });
+                
+                if (response.ok) {
+                    let result = await response.json();
+                    let data = result.record;
+
+                    localStorage.setItem('secret_config_v1', JSON.stringify(data));
+                    console.log("Secret messages updated from Cloud! ☁️");
+                    
+                    if(typeof loadData === "function") loadData(); 
+                    if(typeof renderTaskList === "function") renderTaskList();
+                }
+            } catch (error) {
+                console.log("Could not fetch remote data (Offline?)");
+            }
+        }
+        fetchSecretMessages();
     </script>
 </body>
 </html>
