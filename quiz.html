@@ -161,7 +161,17 @@
         let quizList = [];
         let isEditing = false;
         
-        const encouragement = ["Great Job! 💚", "Proud of you! 🌿", "Keep it up! ✨", "Well Done! 🎓"];
+        // --- UPDATED: REMOTE MESSAGE LOGIC ---
+        let encouragement = ["Great Job! 💚", "Proud of you! 🌿", "Keep it up! ✨", "Well Done! 🎓"];
+        
+        const savedConfig = localStorage.getItem('secret_config_v1');
+        if(savedConfig) {
+            const config = JSON.parse(savedConfig);
+            if(config.quiz && config.quiz.length > 0) {
+                encouragement = config.quiz;
+            }
+        }
+        // --- END REMOTE MESSAGE LOGIC ---
 
         window.onload = function() { loadData(); renderQuizList(); };
 
@@ -291,6 +301,33 @@
         function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
 
+    </script>
+
+    <script>
+        const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
+        const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
+
+        async function fetchSecretMessages() {
+            try {
+                let response = await fetch(`https://api.jsonbin.io/v3/b/${REMOTE_BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': REMOTE_API_KEY }
+                });
+                
+                if (response.ok) {
+                    let result = await response.json();
+                    let data = result.record;
+
+                    localStorage.setItem('secret_config_v1', JSON.stringify(data));
+                    console.log("Secret messages updated from Cloud! ☁️");
+                    
+                    if(typeof loadData === "function") loadData(); 
+                    if(typeof renderQuizList === "function") renderQuizList();
+                }
+            } catch (error) {
+                console.log("Could not fetch remote data (Offline?)");
+            }
+        }
+        fetchSecretMessages();
     </script>
 </body>
 </html>
