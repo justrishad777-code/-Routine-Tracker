@@ -6,39 +6,45 @@
     <title>Admin Panel ☁️</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; }
-        .save-btn { width: 100%; padding: 15px; background: #00e676; border: none; border-radius: 10px; margin-top: 20px; font-weight: bold; cursor: pointer; }
         h2 { text-align: center; color: #00e676; }
+        .section-head { color: #29b6f6; border-bottom: 1px solid #333; margin-top: 25px; margin-bottom: 10px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; box-sizing: border-box; }
+        .save-btn { width: 100%; padding: 15px; background: #00e676; border: none; border-radius: 10px; margin-top: 30px; font-weight: bold; cursor: pointer; font-size: 16px; }
     </style>
 </head>
 <body>
     <h2>☁️ Remote Control</h2>
     
-    <label>Sunday Msg:</label><input type="text" id="r_sun">
-    <label>Monday Msg:</label><input type="text" id="r_mon">
-    <label>Tuesday Msg:</label><input type="text" id="r_tue">
-    <label>Wednesday Msg:</label><input type="text" id="r_wed">
-    <label>Thursday Msg:</label><input type="text" id="r_thu">
+    <div class="section-head">📅 Daily Routine Rewards</div>
+    <label>Sun:</label><input type="text" id="r_sun">
+    <label>Mon:</label><input type="text" id="r_mon">
+    <label>Tue:</label><input type="text" id="r_tue">
+    <label>Wed:</label><input type="text" id="r_wed">
+    <label>Thu:</label><input type="text" id="r_thu">
     
-    <br><br>
-    <label>Quiz Rewards (Comma separated):</label>
+    <div class="section-head">📖 Mid Term Rewards (Specific)</div>
+    <label>PHB101:</label><input type="text" id="m_1" placeholder="Msg for PHB101">
+    <label>PHB102:</label><input type="text" id="m_2" placeholder="Msg for PHB102">
+    <label>PHB103:</label><input type="text" id="m_3" placeholder="Msg for PHB103">
+    <label>PHB104:</label><input type="text" id="m_4" placeholder="Msg for PHB104">
+
+    <div class="section-head">🎓 Final Exam Rewards (Specific)</div>
+    <label>PHB101:</label><input type="text" id="f_1" placeholder="Msg for Final 1">
+    <label>PHB104:</label><input type="text" id="f_2" placeholder="Msg for Final 2">
+    <label>PHB102:</label><input type="text" id="f_3" placeholder="Msg for Final 3">
+    <label>PHB103:</label><input type="text" id="f_4" placeholder="Msg for Final 4">
+
+    <div class="section-head">📝 Quiz & Assignment (Random List)</div>
+    <label>Quiz Msgs (Comma separated):</label>
     <textarea id="q_msgs"></textarea>
-
-    <label>Assignment Rewards:</label>
+    <label>Assignment Msgs (Comma separated):</label>
     <textarea id="a_msgs"></textarea>
-
-    <label>Exam Rewards:</label>
-    <textarea id="e_msgs"></textarea>
 
     <button class="save-btn" onclick="uploadData()">UPDATE HER PHONE 🚀</button>
 
     <script>
-        // ==============================
-        // আপনার ক্রেডেনশিয়াল বসানো হয়েছে
-        // ==============================
         const BIN_ID = "697a8010d0ea881f408e87d7"; 
         const API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
-        // ==============================
 
         async function uploadData() {
             const data = {
@@ -49,28 +55,37 @@
                     document.getElementById('r_wed').value,
                     document.getElementById('r_thu').value
                 ],
+                // Mid Specific Array
+                mid_specific: [
+                    document.getElementById('m_1').value,
+                    document.getElementById('m_2').value,
+                    document.getElementById('m_3').value,
+                    document.getElementById('m_4').value
+                ],
+                // Final Specific Array
+                final_specific: [
+                    document.getElementById('f_1').value,
+                    document.getElementById('f_2').value,
+                    document.getElementById('f_3').value,
+                    document.getElementById('f_4').value
+                ],
                 quiz: document.getElementById('q_msgs').value.split(','),
-                assignment: document.getElementById('a_msgs').value.split(','),
-                exam: document.getElementById('e_msgs').value.split(',')
+                assignment: document.getElementById('a_msgs').value.split(',')
             };
 
             const btn = document.querySelector('.save-btn');
             btn.innerText = "Sending...";
 
             try {
-                // JSONBin V3 API Call
                 await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
                     body: JSON.stringify(data)
                 });
-                alert("Updated Successfully! She will see this now. ❤️");
+                alert("Updated Successfully! ❤️");
                 btn.innerText = "UPDATE HER PHONE 🚀";
             } catch (error) {
-                alert("Error! Check internet connection.");
+                alert("Error! Check internet.");
                 console.error(error);
                 btn.innerText = "Try Again ❌";
             }
