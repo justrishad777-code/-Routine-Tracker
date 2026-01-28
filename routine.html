@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Routine 🌸</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; padding: 10px; margin: 0; }
+        
+        /* === MENU BUTTON STYLE === */
+        .menu-btn {
+            position: fixed; top: 15px; left: 15px;
+            font-size: 24px; cursor: pointer; color: #ad1457;
+            background: white; padding: 5px 12px; border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        /* === SIDEBAR MENU STYLE === */
+        .side-menu {
+            height: 100%; width: 0; position: fixed; z-index: 2000;
+            top: 0; left: 0; background-color: rgba(255, 255, 255, 0.95);
+            overflow-x: hidden; transition: 0.4s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px); padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 15px 25px; text-decoration: none; font-size: 18px;
+            color: #880e4f; display: block; transition: 0.3s;
+            font-weight: bold; border-bottom: 1px solid #fce4ec;
+        }
+
+        .side-menu a:hover { background-color: #fce4ec; color: #d81b60; }
+
+        .side-menu .close-btn {
+            position: absolute; top: 10px; right: 20px; font-size: 36px;
+            margin-left: 50px; cursor: pointer; color: #ad1457;
+        }
+
+        /* --- REST OF THE CSS --- */
+        h2 { text-align: center; color: #ad1457; font-family: 'Courier New', monospace; margin-top: 50px; }
+        p { text-align: center; font-size: 12px; color: #880e4f; margin-bottom: 15px; }
+
+        .container { max-width: 100%; overflow-x: auto; background: white; border-radius: 15px; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.2); padding: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background-color: #ec407a; color: white; padding: 12px; border: 1px solid #f8bbd0; border-radius: 5px; }
+        td { border: 1px solid #fce4ec; padding: 8px; text-align: center; vertical-align: top; }
+        
+        td textarea { width: 95%; height: 50px; border: none; resize: none; font-family: inherit; text-align: center; background: transparent; color: #555; }
+        td textarea:focus { outline: none; background: #fff0f6; border-bottom: 2px solid #ec407a; }
+
+        .class-check { display: block; margin: 5px auto; transform: scale(1.3); accent-color: #d81b60; cursor: pointer; }
+        
+        .heart-checkbox { appearance: none; display: inline-block; font-size: 30px; transition: all 0.5s; pointer-events: none; }
+        .heart-checkbox::before { content: '🔒'; opacity: 0.5; font-size: 24px; }
+        .heart-checkbox:checked::before { content: '❤️'; }
+        .heart-checkbox:checked { transform: scale(1.4); filter: drop-shadow(0 0 5px rgba(233, 30, 99, 0.5)); }
+
+        .surprise-msg { display: none; margin-top: 10px; padding: 10px; background: #fff0f6; border: 2px solid #ec407a; border-radius: 15px; color: #ad1457; font-size: 14px; font-weight: bold; animation: bounceIn 0.8s; }
+        @keyframes bounceIn { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+
+        .btn-container { text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
+        .save-btn { padding: 12px 25px; background: linear-gradient(45deg, #ec407a, #d81b60); color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .reset-btn { padding: 12px 25px; background: #ff5252; color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .status-text { font-size: 11px; color: #880e4f; margin-top: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="menu-btn" onclick="openNav()">☰ Menu</div>
+
+    <div id="mySidenav" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="index.html">🏠 Dashboard</a>
+        <a href="routine.html">📅 Routine</a>
+        <a href="quiz.html">📝 Quiz</a>
+        <a href="assignment.html">📂 Assignments</a>
+        <a href="mid.html">📖 Mid Term</a>
+        <a href="final.html">🎓 Final Exam</a>
+    </div>
+
+    <h2>✨ Class Routine ✨</h2>
+    <p>Complete your classes to unlock my love!</p>
+    
+    <div class="container">
+        <table id="routineTable">
+            <thead>
+                <tr><th>Time</th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>9:30 AM</td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-0" onclick="checkDay(0)"></td>
+                    <td><textarea>PHB101</textarea><input type="checkbox" class="class-check day-1" onclick="checkDay(1)"></td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-2" onclick="checkDay(2)"></td>
+                    <td><textarea>PHB101</textarea><input type="checkbox" class="class-check day-3" onclick="checkDay(3)"></td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-4" onclick="checkDay(4)"></td>
+                </tr>
+                <tr>
+                    <td>11:00 AM</td>
+                    <td><textarea>PHB102L</textarea><input type="checkbox" class="class-check day-0" onclick="checkDay(0)"></td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-1" onclick="checkDay(1)"></td>
+                    <td><textarea>PHB104L</textarea><input type="checkbox" class="class-check day-2" onclick="checkDay(2)"></td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-3" onclick="checkDay(3)"></td>
+                    <td><textarea placeholder="Sub..."></textarea><input type="checkbox" class="class-check day-4" onclick="checkDay(4)"></td>
+                </tr>
+
+                <tr style="background-color: #ffeef4;">
+                    <td style="color: #ad1457; font-weight: bold; font-size: 12px;">Reward</td>
+                    <td><input type="checkbox" class="heart-checkbox" id="heart-0"><div class="status-text" id="status-0">Locked 🔒</div><div class="surprise-msg" id="msg-0"></div></td>
+                    <td><input type="checkbox" class="heart-checkbox" id="heart-1"><div class="status-text" id="status-1">Locked 🔒</div><div class="surprise-msg" id="msg-1"></div></td>
+                    <td><input type="checkbox" class="heart-checkbox" id="heart-2"><div class="status-text" id="status-2">Locked 🔒</div><div class="surprise-msg" id="msg-2"></div></td>
+                    <td><input type="checkbox" class="heart-checkbox" id="heart-3"><div class="status-text" id="status-3">Locked 🔒</div><div class="surprise-msg" id="msg-3"></div></td>
+                    <td><input type="checkbox" class="heart-checkbox" id="heart-4"><div class="status-text" id="status-4">Locked 🔒</div><div class="surprise-msg" id="msg-4"></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-container">
+        <button class="save-btn" onclick="saveData()">Save Progress ❤️</button>
+        <button class="reset-btn" onclick="resetData()">Reset 🔄</button>
+    </div>
+
+    <script>
+        // --- MENU FUNCTIONS ---
+        function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+
+        // --- ROUTINE LOGIC ---
+        const loveNotes = [ "Sunday Completed! Love You! 🥰", "Proud of you baby! ❤️", "You earned a chocolate! 🍫", "Great job! Keep smiling! 😊", "Weekend is here! Miss you! 💑" ];
+
+        function checkDay(dayIndex) {
+            const inputs = document.querySelectorAll('.class-check.day-' + dayIndex);
+            let allChecked = true;
+            inputs.forEach(input => { if (!input.checked) allChecked = false; });
+            const heartBtn = document.getElementById('heart-' + dayIndex);
+            const msgDiv = document.getElementById('msg-' + dayIndex);
+            const statusTxt = document.getElementById('status-' + dayIndex);
+
+            if (allChecked) {
+                if (!heartBtn.checked) {
+                    heartBtn.checked = true; msgDiv.innerText = loveNotes[dayIndex]; msgDiv.style.display = "block"; statusTxt.innerText = "Done! ✨";
+                }
+            } else {
+                heartBtn.checked = false; msgDiv.style.display = "none"; statusTxt.innerText = "Locked 🔒";
+            }
+        }
+        function saveData() { document.querySelectorAll('textarea').forEach((input, i) => localStorage.setItem('t_'+i, input.value)); document.querySelectorAll('.class-check').forEach((chk, i) => localStorage.setItem('c_'+i, chk.checked)); alert('Routine Saved! ❤️'); }
+        function resetData() { if(confirm("Clear all data?")) { localStorage.clear(); location.reload(); } }
+        function loadData() { document.querySelectorAll('textarea').forEach((input, i) => { const v = localStorage.getItem('t_'+i); if(v) input.value = v; }); document.querySelectorAll('.class-check').forEach((chk, i) => { chk.checked = (localStorage.getItem('c_'+i) === 'true'); }); for(let i=0; i<5; i++) { checkDay(i); } }
+        window.onload = loadData;
+    </script>
+</body>
+</html>
