@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks & Pres. 💙</title>
+    <style>
+        /* === BLUE THEME === */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e3f2fd; padding: 0; margin: 0; padding-bottom: 80px; }
+        
+        /* Navigation & Edit Button */
+        .menu-btn {
+            position: fixed; top: 15px; left: 15px; font-size: 20px; cursor: pointer; color: #0d47a1;
+            background: white; padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1000;
+        }
+
+        .edit-btn {
+            position: fixed; top: 15px; right: 15px; font-size: 14px; cursor: pointer; color: white;
+            background: #1976d2; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            z-index: 1000; font-weight: bold; border: 2px solid white; transition: 0.3s;
+        }
+        .edit-btn.editing { background: #2e7d32; }
+
+        /* Sidebar */
+        .side-menu {
+            height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
+            background-color: rgba(255, 255, 255, 0.98); overflow-x: hidden; transition: 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 60px;
+        }
+        .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #0d47a1; display: block; font-weight: bold; border-bottom: 1px solid #bbdefb; }
+        .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #0d47a1; }
+
+        /* Header */
+        .header { text-align: center; margin-top: 70px; margin-bottom: 20px; }
+        h2 { color: #0d47a1; font-family: 'Courier New', monospace; margin: 0; }
+        p { font-size: 12px; color: #1565c0; }
+
+        /* === ASSIGNMENT CARD DESIGN === */
+        .container { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .task-card {
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 6px solid #1976d2; position: relative;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        /* Row 1: Course & Date */
+        .card-top { display: flex; justify-content: space-between; align-items: center; }
+        .course-input { 
+            font-weight: bold; color: #0d47a1; font-size: 18px; border: none; width: 55%;
+        }
+        .date-input {
+            font-size: 12px; color: #1565c0; border: 1px solid #bbdefb; padding: 4px; border-radius: 5px; background: #e3f2fd;
+        }
+
+        /* Row 2: Type Selector */
+        .type-select {
+            width: 100%; border: none; background: #f5f5f5; padding: 5px; border-radius: 5px;
+            font-size: 13px; color: #555; font-weight: bold;
+        }
+        .type-badge {
+            display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; color: white;
+        }
+        .bg-assignment { background-color: #42a5f5; } /* Blue */
+        .bg-presentation { background-color: #ab47bc; } /* Purple */
+
+        /* Row 3: Topic */
+        .topic-box textarea {
+            width: 100%; border: none; font-family: inherit; font-size: 14px; color: #333;
+            background: #f1f8e9; resize: none; height: 50px; border-radius: 8px; padding: 8px; box-sizing: border-box; margin-top: 5px;
+        }
+        /* Blue tint on focus */
+        .topic-box textarea:focus { outline: 1px solid #1976d2; background: #e3f2fd; } 
+
+        /* Row 4: Checkbox */
+        .status-box { 
+            display: flex; align-items: center; justify-content: space-between; 
+            margin-top: 5px; background: #e3f2fd; padding: 8px 15px; border-radius: 10px;
+        }
+        .task-check { transform: scale(1.4); accent-color: #1976d2; cursor: pointer; }
+        .success-msg {
+            display: none; font-size: 12px; font-weight: bold; color: #0d47a1; 
+            animation: slideIn 0.4s;
+        }
+        @keyframes slideIn { 0% { transform: translateX(-10px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+
+        /* Delete Button */
+        .delete-btn {
+            position: absolute; top: 10px; right: -10px; background: #ffebee; color: #d32f2f;
+            border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Add Button */
+        .add-btn {
+            display: none; width: 100%; padding: 12px; background: white; border: 2px dashed #1976d2;
+            color: #0d47a1; font-weight: bold; border-radius: 15px; cursor: pointer;
+        }
+        
+        /* Footer */
+        .footer-btns { text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .save-btn { padding: 12px 40px; background: #1976d2; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3); }
+        .reset-btn { padding: 10px 30px; background: #ef5350; color: white; border: none; border-radius: 50px; cursor: pointer; }
+
+        /* === ROMANTIC POPUP (Reused) === */
+        #romanticModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-box { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(13, 71, 161, 0.2); border: 2px solid #bbdefb; width: 80%; max-width: 300px; }
+        .modal-input { width: 80%; padding: 10px; border: 2px solid #90caf9; border-radius: 50px; text-align: center; margin-bottom: 15px; font-size: 16px; }
+        .modal-btn { padding: 8px 25px; background: #1976d2; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        .close-modal { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #0d47a1; }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu-btn" onclick="openNav()">☰</div>
+    <button id="editBtn" class="edit-btn" onclick="triggerEdit()">✎ Edit</button>
+
+    <div id="romanticModal">
+        <div class="close-modal" onclick="closeModal()">&times;</div>
+        <div class="modal-box">
+            <h3 style="color:#0d47a1;">Enter the digit 😘</h3>
+            <input type="number" id="secretPass" class="modal-input" placeholder="****">
+            <br>
+            <button class="modal-btn" onclick="verifyPass()">Unlock 💙</button>
+            <p id="errMsg" style="display:none; color:red; font-size:12px; margin-top:10px;">Try again baby 🥺</p>
+        </div>
+    </div>
+
+    <div id="mySidenav" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="index.html">🏠 Dashboard</a>
+        <a href="routine.html">📅 Routine</a>
+        <a href="quiz.html">📝 Quiz</a>
+        <a href="assignment.html">📂 Assignments</a>
+        <a href="mid.html">📖 Mid Term</a>
+        <a href="final.html">🎓 Final Exam</a>
+    </div>
+
+    <div class="header">
+        <h2>📂 Assignments 📂</h2>
+        <p>You got this! Stay focused! 💙</p>
+    </div>
+
+    <div class="container" id="taskContainer">
+        </div>
+    
+    <div class="container">
+        <button class="add-btn" id="addBtn" onclick="addTask()">+ Add New Task</button>
+    </div>
+
+    <div class="footer-btns">
+        <button class="save-btn" onclick="saveData()">Save Progress 💙</button>
+        <button class="reset-btn" onclick="resetData()">Reset 🔄</button>
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE ---
+        const defaultTasks = [
+            { course: "PHB101", type: "Assignment", topic: "Chapter 2 Summary", date: "2024-02-20", completed: false },
+            { course: "PHB104L", type: "Presentation", topic: "Group Project Slide", date: "2024-02-25", completed: false }
+        ];
+
+        let taskList = [];
+        let isEditing = false;
+        
+        const messages = ["Submission Done! 🎉", "Presentation Ready! 🎤", "Great Work! 💙", "So Proud of You! ✨"];
+
+        window.onload = function() { loadData(); renderTaskList(); };
+
+        // --- RENDER FUNCTION ---
+        function renderTaskList() {
+            const container = document.getElementById("taskContainer");
+            container.innerHTML = "";
+
+            taskList.forEach((task, index) => {
+                const card = document.createElement("div");
+                card.className = "task-card";
+
+                // Determine Badge Color
+                const badgeClass = task.type === "Presentation" ? "bg-presentation" : "bg-assignment";
+
+                // Type Selector (Visible only in Edit Mode) OR Badge (Visible in View Mode)
+                let typeHtml = "";
+                if(isEditing) {
+                    typeHtml = `
+                        <select class="type-select" onchange="updateData(${index}, 'type', this.value)">
+                            <option value="Assignment" ${task.type === 'Assignment' ? 'selected' : ''}>📝 Assignment</option>
+                            <option value="Presentation" ${task.type === 'Presentation' ? 'selected' : ''}>🎤 Presentation</option>
+                        </select>
+                    `;
+                } else {
+                    typeHtml = `<span class="type-badge ${badgeClass}">${task.type === 'Assignment' ? '📝 Assignment' : '🎤 Presentation'}</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <input type="text" class="course-input" value="${task.course}" 
+                            onchange="updateData(${index}, 'course', this.value)" 
+                            ${isEditing ? "" : "readonly"}>
+                        <input type="date" class="date-input" value="${task.date}" 
+                            onchange="updateData(${index}, 'date', this.value)" 
+                            ${isEditing ? "" : "readonly"}>
+                    </div>
+                    
+                    <div style="margin-top: 5px;">${typeHtml}</div>
+
+                    <div class="topic-box">
+                        <textarea placeholder="Topic details..." 
+                            onchange="updateData(${index}, 'topic', this.value)" 
+                            ${isEditing ? "" : "readonly"}>${task.topic}</textarea>
+                    </div>
+
+                    <div class="status-box">
+                        <span style="font-size:12px; color:#555;">Mark as Done:</span>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div class="success-msg" style="display: ${task.completed ? 'block' : 'none'}">
+                                ${messages[index % messages.length]}
+                            </div>
+                            <input type="checkbox" class="task-check" 
+                                onchange="toggleCompleted(${index})" ${task.completed ? "checked" : ""}>
+                        </div>
+                    </div>
+
+                    <button class="delete-btn" onclick="deleteRow(${index})" 
+                        style="display: ${isEditing ? 'block' : 'none'}">✖</button>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById("addBtn").style.display = isEditing ? "block" : "none";
+        }
+
+        // --- LOGIC ---
+        function updateData(index, field, value) {
+            taskList[index][field] = value;
+            if(field === 'type') renderTaskList(); // Re-render to update badge color immediately
+        }
+
+        function toggleCompleted(index) {
+            taskList[index].completed = !taskList[index].completed;
+            renderTaskList(); 
+        }
+
+        function addTask() {
+            taskList.push({ course: "New Course", type: "Assignment", topic: "", date: "", completed: false });
+            renderTaskList();
+        }
+
+        function deleteRow(index) {
+            if(confirm("Delete this task?")) {
+                taskList.splice(index, 1);
+                renderTaskList();
+            }
+        }
+
+        // --- EDIT MODE (PASSWORD: 0812) ---
+        function triggerEdit() {
+            if(isEditing) {
+                isEditing = false;
+                document.getElementById("editBtn").innerText = "✎ Edit";
+                document.getElementById("editBtn").classList.remove("editing");
+                saveData();
+                renderTaskList();
+            } else {
+                document.getElementById("romanticModal").style.display = "flex";
+                document.getElementById("secretPass").value = "";
+                document.getElementById("errMsg").style.display = "none";
+            }
+        }
+
+        function verifyPass() {
+            const pass = document.getElementById("secretPass").value;
+            if(pass === "0812") {
+                isEditing = true;
+                document.getElementById("romanticModal").style.display = "none";
+                const btn = document.getElementById("editBtn");
+                btn.innerText = "✓ Done";
+                btn.classList.add("editing");
+                renderTaskList();
+            } else {
+                document.getElementById("errMsg").style.display = "block";
+            }
+        }
+        function closeModal() { document.getElementById("romanticModal").style.display = "none"; }
+
+        // --- STORAGE ---
+        function saveData() {
+            localStorage.setItem("myAssignmentData", JSON.stringify(taskList));
+            alert("Saved successfully! 💙");
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem("myAssignmentData");
+            if(saved) taskList = JSON.parse(saved);
+            else taskList = JSON.parse(JSON.stringify(defaultTasks));
+        }
+
+        function resetData() {
+            if(confirm("Delete all data?")) {
+                localStorage.removeItem("myAssignmentData");
+                location.reload();
+            }
+        }
+
+        // --- NAV ---
+        function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+
+    </script>
+</body>
+</html>
