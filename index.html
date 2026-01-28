@@ -3,111 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wifey's Dashboard ❤️</title>
+    <title>My Personal Dashboard 🌸</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; padding: 0; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        
-        /* === LOGIN STYLE === */
-        #loginOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(252, 228, 236, 0.95);
-            display: flex; justify-content: center; align-items: center; z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        .login-box {
-            background: white; padding: 40px; border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.2);
-            text-align: center; border: 3px solid #fff0f6;
-            animation: popUp 0.6s ease-out;
-        }
-        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        input { padding: 10px; border-radius: 20px; border: 1px solid #f48fb1; text-align: center; outline: none; margin-top: 10px; }
-        .unlock-btn { margin-top: 15px; padding: 10px 25px; background: #ec407a; color: white; border: none; border-radius: 20px; cursor: pointer; }
+        /* === DASHBOARD THEME === */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; padding: 0; margin: 0; }
 
-        /* === DASHBOARD STYLE === */
-        #dashboard { display: none; width: 100%; max-width: 500px; padding: 20px; text-align: center; }
-        
-        .header { margin-top: 20px; animation: fadeIn 1s; }
-        .header h1 { color: #ad1457; font-family: 'Courier New', monospace; font-size: 28px; margin: 0; }
-        .header p { color: #880e4f; font-size: 14px; margin-top: 5px; }
+        /* Header Section */
+        .hero {
+            background: linear-gradient(135deg, #ec407a, #d81b60);
+            color: white; padding: 40px 20px; text-align: center;
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+        .hero h1 { margin: 0; font-family: 'Courier New', monospace; font-size: 28px; }
+        .hero p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
 
-        .menu-grid {
-            display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 30px;
+        /* Menu Grid */
+        .menu-container {
+            padding: 25px; display: grid; grid-template-columns: 1fr; gap: 15px;
+            max-width: 500px; margin: 0 auto;
         }
 
-        /* কার্ড বাটন ডিজাইন */
         .menu-card {
             background: white; padding: 20px; border-radius: 15px;
-            text-decoration: none; color: #880e4f; font-weight: bold; font-size: 18px;
-            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.1);
-            transition: transform 0.2s, background 0.3s;
             display: flex; align-items: center; justify-content: space-between;
-            border-left: 5px solid #ec407a;
+            text-decoration: none; color: #333; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid #ccc;
         }
+        .menu-card:active { transform: scale(0.98); background: #fff0f6; }
         
-        .menu-card:hover { transform: translateY(-3px); background: #fff0f6; }
-        .icon { font-size: 24px; margin-right: 10px; }
-        
-        /* ফুটার */
-        .footer { margin-top: 50px; font-size: 12px; color: #ad1457; opacity: 0.7; }
+        .card-title { font-size: 18px; font-weight: bold; color: #444; }
+        .card-icon { font-size: 24px; }
 
+        /* Specific Colors for Cards */
+        .routine { border-left-color: #ec407a; } /* Pink */
+        .quiz { border-left-color: #558b2f; }    /* Green */
+        .assign { border-left-color: #1976d2; }  /* Blue */
+        .mid { border-left-color: #7b1fa2; }     /* Purple */
+        .final { border-left-color: #d32f2f; }   /* Red */
+
+        /* Footer */
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #880e4f; padding-bottom: 30px; }
+
+        /* === SECRET BUTTON STYLE === */
+        .secret-trigger {
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+            font-size: 12px;
+            opacity: 0.1; /* Almost Invisible */
+            cursor: default;
+            color: #ad1457;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
 
-    <div id="loginOverlay">
-        <div class="login-box">
-            <h2 style="color: #ad1457; margin:0;">Knock Knock! 🚪</h2>
-            <p style="color: #880e4f; font-size: 12px;">Only for my special person</p>
-            <input type="password" id="passInput" placeholder="Secret Code...">
-            <br>
-            <button class="unlock-btn" onclick="checkPass()">Enter ❤️</button>
-            <p id="errorMsg" style="display:none; color:red; font-size:12px; margin-top:5px;">Wrong password, honey! 🥺</p>
-        </div>
+    <div class="hero">
+        <h1>Welcome Back! ❤️</h1>
+        <p>Your academic assistant is ready.</p>
     </div>
 
-    <div id="dashboard">
-        <div class="header">
-            <h1>Welcome Wifey 🩷</h1>
-            <p>Everything organized just for you!</p>
-        </div>
+    <div class="menu-container">
+        
+        <a href="routine.html" class="menu-card routine">
+            <span class="card-title">📅 Daily Routine</span>
+            <span class="card-icon">🌸</span>
+        </a>
 
-        <div class="menu-grid">
-            <a href="routine.html" class="menu-card">
-                <span>📅 Your Routine</span> <span class="icon">➡️</span>
-            </a>
-            
-            <a href="quiz.html" class="menu-card">
-                <span>📝 Your Quiz</span> <span class="icon">➡️</span>
-            </a>
-            
-            <a href="assignment.html" class="menu-card">
-                <span>📂 Assignment / Pres.</span> <span class="icon">➡️</span>
-            </a>
+        <a href="quiz.html" class="menu-card quiz">
+            <span class="card-title">📝 Quiz Schedule</span>
+            <span class="card-icon">🌿</span>
+        </a>
 
-            <a href="mid.html" class="menu-card">
-                <span>📖 Mid Term</span> <span class="icon">➡️</span>
-            </a>
+        <a href="assignment.html" class="menu-card assign">
+            <span class="card-title">📂 Assignments</span>
+            <span class="card-icon">💙</span>
+        </a>
 
-            <a href="final.html" class="menu-card">
-                <span>🎓 Final Exam</span> <span class="icon">➡️</span>
-            </a>
-        </div>
+        <a href="mid.html" class="menu-card mid">
+            <span class="card-title">📖 Mid Term Exam</span>
+            <span class="card-icon">💜</span>
+        </a>
 
-        <div class="footer">
-            Made with lots of love... ❤️
-        </div>
+        <a href="final.html" class="menu-card final">
+            <span class="card-title">🎓 Final Exam</span>
+            <span class="card-icon">❤️</span>
+        </a>
+
     </div>
+
+    <div class="footer">
+        Made with love for you. ✨
+    </div>
+
+    <div class="secret-trigger" onclick="accessAdmin()">⚙️</div>
 
     <script>
-        function checkPass() {
-            var pass = document.getElementById('passInput').value;
-            if(pass === "0812") { // পাসওয়ার্ড এখানে সেট করুন
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else {
-                document.getElementById('errorMsg').style.display = 'block';
+        function accessAdmin() {
+            const pass = prompt("System Access:"); // Subtle prompt
+            
+            // YOUR PASSWORD
+            if (pass === "herASS") {
+                window.location.href = "settings.html";
+            } else if (pass !== null) {
+                alert("Error: Access Denied.");
             }
         }
     </script>
