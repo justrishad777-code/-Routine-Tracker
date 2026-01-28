@@ -95,7 +95,7 @@
             width: 100%; border: none; font-family: inherit; font-size: 16px; color: #333;
             background: transparent; resize: none; height: 40px; font-weight: bold; margin-top: 5px;
         }
-        /* Focus style removed to prevent jumpiness, handled by CSS only */
+        
         .subject-box textarea:focus { outline: none; border-bottom: 1px solid #ec407a; background: #fffbfd; }
         .subject-box textarea[readonly] { color: #555; border-bottom: none; background: transparent; }
 
@@ -182,7 +182,19 @@
             []
         ];
 
-        const loveNotes = ["Sunday Done! You worked so hard! 🥰", "Monday Blues? Not for my girl! ❤️", "Tuesday Treat: I love you! 🍫", "Wednesday Win! Keep shining! ✨", "Weekend is almost here! 💑"];
+        // --- UPDATED: REMOTE MESSAGE LOGIC ---
+        // Default messages
+        let loveNotes = ["Sunday Done! You worked so hard! 🥰", "Monday Blues? Not for my girl! ❤️", "Tuesday Treat: I love you! 🍫", "Wednesday Win! Keep shining! ✨", "Weekend is almost here! 💑"];
+
+        // Check LocalStorage for Cloud Updates
+        const savedConfig = localStorage.getItem('secret_config_v1');
+        if(savedConfig) {
+            const config = JSON.parse(savedConfig);
+            if(config.routine && config.routine.length === 5) {
+                loveNotes = config.routine;
+            }
+        }
+        // --- END REMOTE MESSAGE LOGIC ---
 
         let currentRoutine = [];
         let activeDay = 0;
@@ -270,8 +282,6 @@
                             ${isEditing ? "" : "readonly"}>${task.subject}</textarea>
                     </div>
                 `;
-                // NOTE: 'onchange' used above fix backspace issue. 
-                // It saves ONLY when user clicks away.
                 container.appendChild(card);
             });
 
@@ -299,7 +309,6 @@
 
         // --- DATA HANDLING ---
         function updateSubject(day, index, val) {
-            // This runs ONLY when user finishes typing and clicks away
             currentRoutine[day][index].subject = val;
         }
 
@@ -340,6 +349,35 @@
 
         function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+    </script>
+
+    <script>
+        const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
+        const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
+
+        async function fetchSecretMessages() {
+            try {
+                let response = await fetch(`https://api.jsonbin.io/v3/b/${REMOTE_BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': REMOTE_API_KEY }
+                });
+                
+                if (response.ok) {
+                    let result = await response.json();
+                    let data = result.record;
+
+                    localStorage.setItem('secret_config_v1', JSON.stringify(data));
+                    console.log("Secret messages updated from Cloud! ☁️");
+                    
+                    // Refresh UI
+                    if(typeof loadData === "function") loadData(); 
+                    if(typeof renderRoutine === "function") renderRoutine();
+                }
+            } catch (error) {
+                console.log("Could not fetch remote data (Offline?)");
+            }
+        }
+        // Auto-fetch when page loads
+        fetchSecretMessages();
     </script>
 </body>
 </html>
