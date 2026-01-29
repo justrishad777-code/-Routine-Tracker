@@ -21,7 +21,7 @@
         }
         .edit-btn.editing { background: #2e7d32; }
 
-        /* Sidebar */
+        /* Sidebar Style (Must remain here for the injected sidebar to look good) */
         .side-menu {
             height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
             background-color: rgba(255, 255, 255, 0.98); overflow-x: hidden; transition: 0.3s;
@@ -124,18 +124,7 @@
         </div>
     </div>
 
-    <div id="mySidenav" class="side-menu">
-        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
-        <a href="index.html">🏠 Dashboard</a>
-        
-        <a href="notes.html">💜 Secret Notes</a>
-
-        <a href="routine.html">📅 Routine</a>
-        <a href="quiz.html">📝 Quiz</a>
-        <a href="assignment.html">📂 Assignments</a>
-        <a href="mid.html">📖 Mid Term</a>
-        <a href="final.html">🎓 Final Exam</a>
-    </div>
+    <div id="sidebar-placeholder"></div>
 
     <div class="header">
         <h2>📝 Quiz Schedule 📝</h2>
@@ -153,6 +142,8 @@
         <button class="save-btn" onclick="saveData()">Save Updates 🌿</button>
         <button class="reset-btn" onclick="resetData()">Reset 🔄</button>
     </div>
+
+    <script src="sidebar.js"></script>
 
     <script>
         // --- DATA STRUCTURE ---
@@ -300,7 +291,8 @@
             }
         }
 
-        // --- NAV ---
+        // --- NAV LOGIC ---
+        // Requires #mySidenav which is now injected by sidebar.js
         function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
         function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
 
