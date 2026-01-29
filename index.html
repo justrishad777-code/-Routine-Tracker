@@ -43,7 +43,7 @@
         .hero h1 { margin: 0; font-family: 'Courier New', monospace; font-size: 28px; }
         .hero p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
 
-        /* Menu Grid */
+        /* Menu Grid Style needs to remain here for the injected HTML to look good */
         .menu-container {
             padding: 25px; display: grid; grid-template-columns: 1fr; gap: 15px;
             max-width: 500px; margin: 0 auto; padding-bottom: 60px;
@@ -112,27 +112,7 @@
             <p>Your academic assistant is ready.</p>
         </div>
 
-        <div class="menu-container">
-            <a href="notes.html" class="menu-card" style="border-left: 5px solid #ab47bc;">
-                <span class="card-title">💜 Secret Notes</span><span class="card-icon">📝</span>
-            </a>
-
-            <a href="routine.html" class="menu-card routine">
-                <span class="card-title">📅 Daily Routine</span><span class="card-icon">🌸</span>
-            </a>
-            <a href="quiz.html" class="menu-card quiz">
-                <span class="card-title">📝 Quiz Schedule</span><span class="card-icon">🌿</span>
-            </a>
-            <a href="assignment.html" class="menu-card assign">
-                <span class="card-title">📂 Assignments</span><span class="card-icon">💙</span>
-            </a>
-            <a href="mid.html" class="menu-card mid">
-                <span class="card-title">📖 Mid Term Exam</span><span class="card-icon">💜</span>
-            </a>
-            <a href="final.html" class="menu-card final">
-                <span class="card-title">🎓 Final Exam</span><span class="card-icon">❤️</span>
-            </a>
-        </div>
+        <div id="navbar-placeholder"></div>
 
         <div class="footer">Made with love for you. ✨</div>
 
@@ -152,6 +132,8 @@
             <p id="adminErrorMsg" style="display:none; color:red; font-size:12px; margin-top:10px;">Wrong Password! 🥺</p>
         </div>
     </div>
+
+    <script src="navbar.js"></script>
 
     <script>
         // --- 1. DASHBOARD LOGIN LOGIC ---
@@ -190,4 +172,3 @@
 
 </body>
 </html>
- 
