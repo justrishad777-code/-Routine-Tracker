@@ -73,7 +73,7 @@
 
         /* THE LINED PAPER EFFECT (Fixed Sync Issue) */
         .paper-body {
-            flex: 1; padding: 0 20px; overflow: hidden; /* Scroll removed from container */
+            flex: 1; padding: 0 20px; overflow: hidden; 
             background-color: #fffdf0;
         }
         
@@ -82,14 +82,15 @@
             
             /* Lines move with text */
             background-color: transparent;
-            background-image: linear-gradient(transparent 30px, #e1bee7 31px); /* Line position adjusted */
-            background-size: 100% 31px; 
-            background-attachment: local; /* Magic fix: Background scrolls with text */
+            /* Updated Gradient for Better Sync */
+            background-image: linear-gradient(transparent 95%, #e1bee7 95%); 
+            background-size: 100% 30px; 
+            background-attachment: local; 
             
             font-family: 'Courier New', cursive; 
             font-size: 16px; 
-            line-height: 31px; /* Matches bg size */
-            padding-top: 5px; 
+            line-height: 30px; /* Exact match with bg-size */
+            padding-top: 0; /* Adjusted padding */
             
             color: #4a148c; outline: none; resize: none; 
         }
