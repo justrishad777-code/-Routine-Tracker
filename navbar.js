@@ -4,6 +4,10 @@ const navbarHTML = `
         <span class="card-title">💜 Secret Notes</span><span class="card-icon">📝</span>
     </a>
 
+    <a href="study.html" class="menu-card" style="border-left: 5px solid #fbc02d;">
+        <span class="card-title">🌻 Study Plan</span><span class="card-icon">📚</span>
+    </a>
+
     <a href="routine.html" class="menu-card routine">
         <span class="card-title">📅 Daily Routine</span><span class="card-icon">🌸</span>
     </a>
@@ -22,5 +26,5 @@ const navbarHTML = `
 </div>
 `;
 
-// === EI LINE TA TOMAR FILE E NAI, ETAI MAIN ===
+// Inject the navbar into the page
 document.getElementById("navbar-placeholder").innerHTML = navbarHTML;
