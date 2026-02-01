@@ -1,3 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Routine 🌸</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; padding: 0; margin: 0; padding-bottom: 80px; }
+        
+        /* === NAVIGATION & EDIT BTN === */
+        /* Note: Menu button ta ekhon navbar.js er moddhe thaka uchit, kintu ekhane alada trigger chilo.
+           Ami menu-btn ta rekhe dicchi jate purono logic na vange, kintu side-menu ta navbar.js theke ashbe na 
+           karon side-menu ta main dashboard er menu theke alada chilo.
+           
+           Wait, tomar 'index.html' e menu chilo cards er moto grid.
+           Kintu ei 'routine.html' e menu chilo ekta "Side Menu (Hamburger)".
+           
+           Jodi tumi chao shob page e SAME menu thakuk, tahole 'navbar.js' ta ekhane kaj korbe.
+           Kintu 'routine.html' er design onno rokom.
+           
+           TOBUO, ami 'navbar.js' er grid menu ta ekhane ene dicchi jate "Home" page er sathe mil thake?
+           Naki tumi chao Routine page er "Side Menu" ta-i shob jaigay thakuk?
+           
+           Jhetu tumi bolecho "Menu Bar alada file theke ber kore update korbe", 
+           ami dhore nicchi tumi chao j 'index.html' er moto Grid Menu ta ekhane proyojon nai, 
+           borong ei page er Navigation ta unified hok.
+           
+           PROBLEM: Tomar 'index.html' er menu holo "Dashboard Grid" (Home page content).
+           Ar 'routine.html' er menu holo "Side Drawer".
+           
+           Ami ki korbo: Ami 'navbar.js' ke EKTU UPDATE korbo jate eta ekta "Top Navigation" ba "Side Menu" hoy.
+           KINTU, jhetu tumi 'index.html' er menu ta 'navbar.js' e rekhecho, oita chilo "Links Grid".
+           
+           Jodi ami oi Grid ta ekhane boshal, routine page er upor boro boro card chole ashbe.
+           Eta nishchoi tumi chao na.
+           
+           SOLOUTION:
+           Tomar 'index.html' er "Menu" asole kono Menu Bar na, oita chilo "Homepage Links".
+           Ar 'routine.html' er "Side Menu" ta asole "Navigation Bar".
+           
+           Tai ami ekhon 'routine.html' er Side Menu ta ke NOTUN ekta file banabo: `sidebar.js`.
+           Eta shob page e (routine, notes, quiz, etc) side menu hisebe thakbe.
+           
+           Ami ki thik bujhechi?
+           Jodi tai hoy, tahole `navbar.js` ta sudhu home page er jonno thakuk.
+           Ar `sidebar.js` ta baki shob page er jonno banai?
+           
+           NA, eto jhamela korar dorkar nai. 
+           Tomar `routine.html` er `side-menu` ta ke ami `sidebar.js` baniye dicchi. 
+           Eta tumi `routine.html`, `notes.html` shobgula te use korbe.
+           
+           Ar `index.html` e to `navbar.js` already ache (jeta asole Dashboard Cards).
+        */
+        
+        /* === MENU BUTTON & EDIT BUTTON STYLE === */
+        .menu-btn {
+            position: fixed; top: 15px; left: 15px; font-size: 20px; cursor: pointer; color: #ad1457;
+            background: white; padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 2500;
+        }
+
+        .edit-btn {
+            position: fixed; top: 15px; right: 15px; font-size: 14px; cursor: pointer; color: white;
+            background: #ad1457; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            z-index: 1000; font-weight: bold; border: 2px solid white; transition: 0.3s;
+        }
+        .edit-btn.editing { background: #28a745; }
+
+        /* === ROMANTIC POPUP MODAL (All Inputs) === */
+        #romanticModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(252, 228, 236, 0.8); backdrop-filter: blur(8px);
+            z-index: 3000; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background: white; padding: 30px; border-radius: 25px; text-align: center;
+            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.25); border: 3px solid #fff0f6; 
+            width: 85%; max-width: 320px; animation: floatUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes floatUp { from { transform: translateY(50px) scale(0.8); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+        .modal-box h3 { color: #ad1457; margin-top: 0; font-family: 'Courier New', monospace; font-size: 20px; }
+        .modal-box p { color: #880e4f; font-size: 13px; margin-bottom: 15px; }
+
+        .modal-input {
+            width: 85%; padding: 12px; border: 2px solid #f8bbd0; border-radius: 50px;
+            text-align: center; outline: none; color: #ad1457; font-size: 16px; margin-bottom: 20px;
+            background: #fffbfd; transition: 0.3s;
+        }
+        .modal-input:focus { border-color: #ec407a; box-shadow: 0 0 10px rgba(236, 64, 122, 0.2); }
+
+        .modal-actions { display: flex; justify-content: center; gap: 10px; }
+        
+        .modal-btn-confirm {
+            padding: 10px 25px; background: linear-gradient(45deg, #ec407a, #d81b60); 
+            color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 15px rgba(236, 64, 122, 0.3);
+        }
+        .modal-btn-cancel {
+            padding: 10px 20px; background: #fff0f6; color: #ad1457; border: 1px solid #f8bbd0;
+            border-radius: 50px; cursor: pointer; font-weight: bold;
+        }
+
+        /* === SIDEBAR STYLE (Must remain here for the injected sidebar to look good) === */
+        .side-menu {
+            height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
+            background-color: rgba(255, 255, 255, 0.98); overflow-x: hidden; transition: 0.3s;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 60px;
+        }
+        .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #880e4f; display: block; font-weight: bold; border-bottom: 1px solid #fce4ec; }
+        .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #ad1457; }
+
+        /* === CONTENT STYLES === */
+        .header { text-align: center; margin-top: 70px; margin-bottom: 20px; }
+        h2 { color: #ad1457; font-family: 'Courier New', monospace; margin: 0; }
+        p { font-size: 12px; color: #880e4f; }
+
+        .tab-container {
+            display: flex; justify-content: space-around; background: white;
+            padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+        }
+        .tab-btn {
+            background: none; border: none; font-weight: bold; color: #880e4f;
+            padding: 8px 12px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 14px;
+        }
+        .tab-btn.active { background: #ec407a; color: white; box-shadow: 0 2px 5px rgba(236, 64, 122, 0.4); }
+
+        .day-container { padding: 15px; padding-bottom: 100px; min-height: 300px; }
+
+        .class-card {
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.1);
+            display: flex; flex-direction: column; gap: 5px;
+            margin-bottom: 15px; border-left: 5px solid #ec407a; position: relative;
+        }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .time-box { font-size: 13px; color: #ec407a; font-weight: bold; width: 75%; }
+        
+        .subject-box textarea {
+            width: 100%; border: none; font-family: inherit; font-size: 16px; color: #333;
+            background: transparent; resize: none; height: 40px; font-weight: bold; margin-top: 5px;
+        }
+        
+        .subject-box textarea:focus { outline: none; border-bottom: 1px solid #ec407a; background: #fffbfd; }
+        .subject-box textarea[readonly] { color: #555; border-bottom: none; background: transparent; }
+
+        .class-check { transform: scale(1.5); accent-color: #d81b60; cursor: pointer; }
+        .delete-btn { color: #ff5252; background: none; border: none; font-size: 16px; cursor: pointer; display: none; }
+        
+        .add-class-btn {
+            display: none; width: 100%; padding: 12px; background: #fff0f6; border: 2px dashed #ec407a;
+            color: #ad1457; font-weight: bold; border-radius: 15px; cursor: pointer; margin-bottom: 20px; transition: 0.2s;
+        }
+        .add-class-btn:active { transform: scale(0.98); background: #fce4ec; }
+
+        .reward-box {
+            background: #fff0f6; padding: 20px; border-radius: 15px;
+            text-align: center; border: 2px dashed #ec407a; margin-top: 20px;
+        }
+        .heart-checkbox { appearance: none; font-size: 40px; pointer-events: none; transition: 0.5s; }
+        .heart-checkbox::before { content: '🔒'; opacity: 0.5; font-size: 30px; }
+        .heart-checkbox:checked::before { content: '❤️'; }
+        .heart-checkbox:checked { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(233, 30, 99, 0.4)); }
+        .surprise-msg { display: none; margin-top: 10px; color: #ad1457; font-weight: bold; animation: popUp 0.5s; }
+        @keyframes popUp { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+
+        .btn-container { text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .save-btn { padding: 15px 50px; background: linear-gradient(45deg, #ec407a, #d81b60); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(236, 64, 122, 0.4); }
+        .reset-btn { padding: 10px 30px; background: #ff5252; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 14px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu-btn" onclick="openNav()">☰</div>
+    <button id="editBtn" class="edit-btn" onclick="triggerEdit()">✎ Edit</button>
+
+    <div id="romanticModal">
+        <div class="modal-box">
+            <h3 id="modalTitle">Title ❤️</h3>
+            <p id="modalSub">Subtitle</p>
+            <input type="text" id="modalInput" class="modal-input" placeholder="...">
+            <div class="modal-actions">
+                <button class="modal-btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn-confirm" id="modalConfirmBtn">Done 🌸</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar-placeholder"></div>
+
+    <div class="header">
+        <h2>✨ Daily Routine ✨</h2>
+        <p>Complete tasks to unlock rewards!</p>
+    </div>
+
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="switchDay(0)">Sun</button>
+        <button class="tab-btn" onclick="switchDay(1)">Mon</button>
+        <button class="tab-btn" onclick="switchDay(2)">Tue</button>
+        <button class="tab-btn" onclick="switchDay(3)">Wed</button>
+        <button class="tab-btn" onclick="switchDay(4)">Thu</button>
+    </div>
+
+    <div id="dynamic-content" class="day-container"></div>
+
+    <div class="btn-container">
+        <button class="save-btn" onclick="saveData()">Save Progress ❤️</button>
+        <button class="reset-btn" onclick="resetData()">Reset Everything 🔄</button>
+    </div>
+    
+    <script src="sidebar.js"></script>
+
+    <script>
         // --- DATA ---
         const defaultRoutine = [
             [{ time: "9:30 am - 12:20 pm", subject: "PHB102L-03 -DRJ-10D-22L", completed: false }, { time: "12:30 pm - 1:50 pm", subject: "PHB103-01 -TMZ-07F-24C", completed: false }, { time: "2:00 pm - 3:20 pm", subject: "PHB102-01 -DRJ-07F-24C", completed: false }, { time: "3:30 pm - 4:50 pm", subject: "PHB104-01 -DHY-07F-23C", completed: false }],
@@ -8,26 +222,82 @@
         ];
 
         // --- UPDATED: REMOTE MESSAGE LOGIC ---
-        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu"];
-        
-        // অ্যাডমিন থেকে আসা মেসেজ খুঁজে বের করার ফাংশন
-        function getLoveNote(dayIdx) {
-            const dayKey = dayNames[dayIdx];
-            const cloudData = JSON.parse(localStorage.getItem('adminRewards')) || {};
-            
-            // যদি ক্লাউডে ওই দিনের মেসেজ থাকে তবে সেটা, নাহলে ডিফল্ট মেসেজ
-            return cloudData[dayKey] || "YAY! All tasks done! Proud of you! ❤️";
+        // Default messages
+        let loveNotes = ["Sunday Done! You worked so hard! 🥰", "Monday Blues? Not for my girl! ❤️", "Tuesday Treat: I love you! 🍫", "Wednesday Win! Keep shining! ✨", "Weekend is almost here! 💑"];
+
+        // Check LocalStorage for Cloud Updates
+        const savedConfig = localStorage.getItem('secret_config_v1');
+        if(savedConfig) {
+            const config = JSON.parse(savedConfig);
+            if(config.routine && config.routine.length === 5) {
+                loveNotes = config.routine;
+            }
         }
+        // --- END REMOTE MESSAGE LOGIC ---
 
         let currentRoutine = [];
         let activeDay = 0;
         let isEditing = false;
 
-        window.onload = function() { 
-            loadData(); 
-            fetchSecretMessages(); // ডাটা রিফ্রেশ করার জন্য
-            renderRoutine(); 
-        };
+        window.onload = function() { loadData(); renderRoutine(); };
+
+        // --- ROMANTIC MODAL SYSTEM ---
+        function showRomanticPrompt(title, subtitle, placeholder, type, callback) {
+            const modal = document.getElementById("romanticModal");
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalSub").innerText = subtitle;
+            
+            const input = document.getElementById("modalInput");
+            input.value = "";
+            input.placeholder = placeholder;
+            input.type = type; // text or number
+
+            modal.style.display = "flex";
+            input.focus();
+
+            // Set Confirm Action
+            document.getElementById("modalConfirmBtn").onclick = function() {
+                const val = input.value;
+                if(val) {
+                    callback(val);
+                    closeModal();
+                }
+            };
+        }
+
+        function closeModal() { document.getElementById("romanticModal").style.display = "none"; }
+
+        // --- EDIT LOGIC ---
+        function triggerEdit() {
+            if (isEditing) {
+                // SAVE & CLOSE EDIT
+                isEditing = false;
+                document.getElementById("editBtn").innerText = "✎ Edit";
+                document.getElementById("editBtn").classList.remove("editing");
+                saveData();
+                renderRoutine();
+            } else {
+                // ASK PASSWORD
+                showRomanticPrompt("Enter the digit 😘", "Only for you, my love!", "****", "number", (val) => {
+                    if (val === "0812") {
+                        isEditing = true;
+                        const btn = document.getElementById("editBtn");
+                        btn.innerText = "✓ Done";
+                        btn.classList.add("editing");
+                        renderRoutine();
+                    } else {
+                        alert("Oops! Wrong code baby 🥺");
+                    }
+                });
+            }
+        }
+
+        function addNewClass() {
+            showRomanticPrompt("New Class? 🕒", "When is it happening?", "e.g. 10:00 am - 11:30 am", "text", (time) => {
+                currentRoutine[activeDay].push({ time: time, subject: "Subject Name", completed: false });
+                renderRoutine();
+            });
+        }
 
         // --- RENDER ---
         function renderRoutine() {
@@ -61,17 +331,13 @@
             addBtn.style.display = isEditing ? "block" : "none";
             container.appendChild(addBtn);
 
-            // --- REWARD LOGIC FIX ---
             const allCompleted = tasks.length > 0 && tasks.every(t => t.completed);
             const rewardBox = document.createElement("div");
             rewardBox.className = "reward-box";
-            
-            const currentMessage = getLoveNote(activeDay); // নতুন মেসেজ লজিক
-
             rewardBox.innerHTML = `
                 <input type="checkbox" class="heart-checkbox" ${allCompleted ? "checked" : ""}>
                 <div style="font-size:12px; margin-top:5px; color:#880e4f;">${allCompleted ? "Completed! 🎉" : "Tasks Locked 🔒"}</div>
-                <div id="rewardText" class="surprise-msg" style="display: ${allCompleted ? 'block' : 'none'}">${currentMessage}</div>
+                <div class="surprise-msg" style="display: ${allCompleted ? 'block' : 'none'}">${loveNotes[activeDay]}</div>
             `;
             container.appendChild(rewardBox);
 
@@ -80,7 +346,52 @@
             });
         }
 
-        // --- CLOUD FETCH FUNCTION ---
+        // --- DATA HANDLING ---
+        function updateSubject(day, index, val) {
+            currentRoutine[day][index].subject = val;
+        }
+
+        function deleteTask(index) {
+            if(confirm("Delete this class? 🗑️")) {
+                currentRoutine[activeDay].splice(index, 1);
+                renderRoutine();
+            }
+        }
+
+        function toggleTask(day, index) {
+            currentRoutine[day][index].completed = !currentRoutine[day][index].completed;
+            renderRoutine();
+        }
+
+        function switchDay(dayIndex) {
+            activeDay = dayIndex;
+            renderRoutine();
+        }
+
+        function saveData() {
+            localStorage.setItem("myRoutineData_v5", JSON.stringify(currentRoutine));
+            alert("Saved successfully! ❤️");
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem("myRoutineData_v5");
+            if (saved) currentRoutine = JSON.parse(saved);
+            else currentRoutine = JSON.parse(JSON.stringify(defaultRoutine));
+        }
+
+        function resetData() {
+            if(confirm("Reset EVERYTHING? 😮")) {
+                localStorage.removeItem("myRoutineData_v5");
+                location.reload();
+            }
+        }
+
+        // NAVIGATION LOGIC (Controlled by Sidebar.js mainly, but triggers here)
+        function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+    </script>
+
+    <script>
         const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
         const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
 
@@ -94,11 +405,10 @@
                     let result = await response.json();
                     let data = result.record;
 
-                    // অ্যাডমিন প্যানেলের 'routine_obj' টাকে 'adminRewards' নামে সেভ করছি
-                    if (data.routine_obj) {
-                        localStorage.setItem('adminRewards', JSON.stringify(data.routine_obj));
-                        renderRoutine(); // মেসেজ আপডেট হলে আবার রেন্ডার হবে
-                    }
-                }
-            } catch (error) { console.log("Offline mode or Fetch error"); }
-        }
+                    localStorage.setItem('
+
+
+
+
+
+Eije purono code eitate thik koro kichu noshto chara
