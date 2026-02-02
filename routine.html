@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,26 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #fce4ec; padding: 0; margin: 0; padding-bottom: 80px; }
         
+        /* === SIDEBAR MENU STYLES === */
+        .sidenav {
+            height: 100%; width: 0; position: fixed; z-index: 3000; top: 0; left: 0;
+            background-color: #fff; overflow-x: hidden; transition: 0.4s;
+            padding-top: 60px; box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidenav a {
+            padding: 10px 10px 10px 30px; text-decoration: none; font-size: 18px;
+            color: #ad1457; display: block; transition: 0.3s; font-weight: bold;
+            border-bottom: 1px solid #fce4ec;
+        }
+        .sidenav a:hover { background-color: #fce4ec; }
+        .sidenav .closebtn {
+            position: absolute; top: 0; right: 25px; font-size: 36px; margin-left: 50px; color: #ad1457;
+        }
+
         /* === BUTTONS & UI === */
         .menu-btn {
-            position: fixed; top: 15px; left: 15px; font-size: 20px; cursor: pointer; color: #ad1457;
-            background: white; padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 2500;
+            position: fixed; top: 15px; left: 15px; font-size: 24px; cursor: pointer; color: #ad1457;
+            background: white; padding: 5px 12px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 2500;
         }
 
         .edit-btn {
@@ -116,7 +133,16 @@
 </head>
 <body>
 
-    <div id="sidebar-placeholder"></div>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="index.html">🏠 Dashboard</a>
+        <a href="notes.html">💜 Secret Notes</a>
+        <a href="routine.html">📅 Daily Routine</a>
+        <a href="quiz.html">📝 Quiz Schedule</a>
+        <a href="assignment.html">📂 Assignments</a>
+        <a href="mid.html">📖 Mid Term</a>
+        <a href="final.html">🎓 Final Exam</a>
+    </div>
 
     <div class="menu-btn" onclick="openNav()">☰</div>
     <button id="editBtn" class="edit-btn" onclick="triggerEdit()">✎ Edit</button>
@@ -153,10 +179,12 @@
         <button class="reset-btn" onclick="resetData()">Reset Everything 🔄</button>
     </div>
 
-    <script src="sidebar.js"></script>
-
     <script>
-        // === 1. DATA CONFIGURATION ===
+        // === 1. NAVIGATION LOGIC (Directly here) ===
+        function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
+        function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+
+        // === 2. DATA CONFIGURATION ===
         const defaultRoutine = [
             [{ time: "9:30 am - 12:20 pm", subject: "PHB102L-03 -DRJ-10D-22L", completed: false }, { time: "12:30 pm - 1:50 pm", subject: "PHB103-01 -TMZ-07F-24C", completed: false }, { time: "2:00 pm - 3:20 pm", subject: "PHB102-01 -DRJ-07F-24C", completed: false }, { time: "3:30 pm - 4:50 pm", subject: "PHB104-01 -DHY-07F-23C", completed: false }],
             [{ time: "9:30 am - 10:50 am", subject: "PHB101-01 -MRO-07F-25C", completed: false }],
@@ -172,19 +200,18 @@
         let activeDay = 0;
         let isEditing = false;
 
-        // === 2. INITIALIZATION ===
+        // === 3. INITIALIZATION ===
         window.onload = function() {
             loadData();
             fetchSecretMessages(); // Fetch admin msg immediately
             renderRoutine();
         };
 
-        // === 3. RENDER FUNCTION (UPDATED) ===
+        // === 4. RENDER FUNCTION ===
         function renderRoutine() {
             const container = document.getElementById("dynamic-content");
             container.innerHTML = "";
 
-            // Get tasks for current day
             const tasks = currentRoutine[activeDay];
             
             // Generate Task Cards
@@ -221,11 +248,10 @@
             // === REWARD & MESSAGE LOGIC ===
             const allCompleted = tasks.length > 0 && tasks.every(t => t.completed);
             
-            // Get the message for THIS specific day
-            const dayKey = dayKeys[activeDay]; // e.g., "Sun"
+            // Get the message for THIS specific day from Cloud
+            const dayKey = dayKeys[activeDay]; 
             const savedRewards = JSON.parse(localStorage.getItem("adminRewards")) || {};
             
-            // If admin message exists, use it. Else default.
             const adminMsg = savedRewards[dayKey] && savedRewards[dayKey].trim() !== "" 
                              ? savedRewards[dayKey] 
                              : "YAY! You finished everything! Proud of you! ❤️";
@@ -249,7 +275,7 @@
             });
         }
 
-        // === 4. CORE FUNCTIONS ===
+        // === 5. CORE FUNCTIONS ===
         function switchDay(dayIndex) {
             activeDay = dayIndex;
             renderRoutine();
@@ -257,8 +283,8 @@
 
         function toggleTask(day, index) {
             currentRoutine[day][index].completed = !currentRoutine[day][index].completed;
-            saveData(); // Save check state
-            renderRoutine(); // Re-render to show message if all done
+            saveData(); 
+            renderRoutine(); 
         }
 
         function updateSubject(day, index, val) {
@@ -279,7 +305,7 @@
             });
         }
 
-        // === 5. EDIT MODE & MODAL ===
+        // === 6. EDIT MODE & MODAL ===
         function triggerEdit() {
             if (isEditing) {
                 isEditing = false;
@@ -318,7 +344,7 @@
         }
         function closeModal() { document.getElementById("romanticModal").style.display = "none"; }
 
-        // === 6. DATA STORAGE ===
+        // === 7. DATA STORAGE ===
         function saveData() {
             localStorage.setItem("myRoutineData_v5", JSON.stringify(currentRoutine));
         }
@@ -336,11 +362,7 @@
             }
         }
         
-        // Navigation Logic
-        function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
-        function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
-
-        // === 7. CLOUD SYNC (GET ADMIN MSG) ===
+        // === 8. CLOUD SYNC (GET ADMIN MSG) ===
         const REMOTE_BIN_ID = "697a8010d0ea881f408e87d7"; 
         const REMOTE_API_KEY = "$2a$10$vhszPYO/HWMSbnMiDUcq7eIW6i8BecKgdG6QteMm/FPJ/22fP/VBS";
 
@@ -353,10 +375,8 @@
                     let result = await response.json();
                     
                     // Save ONLY the routine messages to local storage
-                    // Uses 'routine_obj' which is the new Object format
                     if (result.record.routine_obj) {
                         localStorage.setItem('adminRewards', JSON.stringify(result.record.routine_obj));
-                        // Re-render to show updated message immediately
                         renderRoutine();
                     }
                 }
